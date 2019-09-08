@@ -1,0 +1,88 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{parskip}
+
+\title{Solutions to MATH 1111 In-Class Activity 1.2}
+\author{Barrett Brister}
+\date{September 6, 2019}
+\newtheorem*{obs}{Observation}
+
+\begin{document}
+	
+\section{Solution}
+You win with probability $\frac{4}{7}$.
+
+\section{Proof}
+This problem can be modeled as a discrete-time Markov chain with left stochastic matrix
+
+\begin{equation}
+P = \begin{bmatrix}
+	1 & \frac{1}{4} & 0 & 0\\
+	0 & 0 & \frac{3}{4} & 0\\
+	0 & \frac{3}{4} & 0 & 0\\
+	0 & 0 & \frac{1}{4} & 1
+\end{bmatrix}
+\end{equation}
+
+and initial state vector
+
+\begin{equation}
+\mathbf{s}_0 = \begin{bmatrix}0 & 1 & 0 & 0\end{bmatrix}^T
+\end{equation}
+
+where the first row or column denotes a win state for us, the second denotes that it is our turn, the third that it is our opponent's turn, and the fourth that our opponent wins. $\mathbf{s}_n = P^n \mathbf{s}_0$ gives us the state probabilities after $n$ turns. Denote $\mathbf{s}_n^{(j)}$ as the $j$th element of $\mathbf{s}_n$. The problem asks us to find $\lim\limits_{n \rightarrow\infty} \mathbf{s}_n^{(1)}$.
+
+After iterating the first few instances of $\mathbf{s}_i$, we note that $\mathbf{s}_n^{(1)}$ only changes when $i$ is odd:
+
+\begin{equation}
+	\begin{aligned}
+	\mathbf{s}_1^{(1)} = \mathbf{s}_2^{(1)} &= \frac{1}{4}\\
+	\mathbf{s}_3^{(1)} = \mathbf{s}_4^{(1)}  &= \frac{25}{64}\\
+	\mathbf{s}_5^{(1)} = \mathbf{s}_6^{(1)}  &= \frac{481}{1024}\\
+	\mathbf{s}_7^{(1)} = \mathbf{s}_8^{(1)}  &= \frac{8425}{16384}\\
+	\mathbf{s}_9^{(1)} = \mathbf{s}_{10}^{(1)}  &= \frac{141361}{262144}\\
+	\end{aligned}
+\end{equation}
+
+etc. This matches our intuition that the probability of having won increases if and only if it is our turn. So we can think of $\mathbf{s}_1$ as the true base case and left multiply by $P^2$ to get subsequent relevant cases.
+
+\begin{obs}
+	For all positive odd values of $i$, $\mathbf{s}_i^{(2)}=0$.
+\end{obs}
+\begin{proof}
+	We proceed by induction. The base case, $i=1$, is trivial. Suppose that $k$ is odd and $\mathbf{s}_k = \begin{bmatrix}a & b & 0 & c\end{bmatrix}^T$ for arbitrary values $a$, $b$, and $c$. Then
+	\begin{equation}\label{iterationVector}
+	\mathbf{s}_{k+2} = P^2 \mathbf{s}_k =
+	\begin{bmatrix}
+	1 & \frac{1}{4} & \frac{3}{16} & 0\\
+	0 & \frac{9}{16} & 0 & 0\\
+	0 & 0 & \frac{9}{16} & 0\\
+	0 & \frac{3}{16} & \frac{1}{4} & 1
+	\end{bmatrix}
+	\begin{bmatrix}a\\ b\\ 0\\ c \end{bmatrix} = 
+	\begin{bmatrix}
+	a + \frac{1}{4}b\\
+	\frac{9}{16}b\\ 0\\
+	\frac{3}{16}b + c
+	\end{bmatrix}
+	\end{equation}
+\end{proof}
+
+Since $\mathbf{s}_{k+2}^{(1)}$ and $\mathbf{s}_{k+2}^{(2)}$ only depend on a combination of $a$ and $b$, we may reduce the first two rows of \eqref{iterationVector} to the set of difference equations
+
+\begin{equation}\begin{aligned}
+x_{n+1} &= x_i + \frac{1}{4}y_n, \quad &x_0 = 0\\
+y_{n+1} &= \frac{9}{16}y_n, \quad &y_0 = 1
+\end{aligned}\end{equation}
+
+which has the solution 
+
+\begin{equation}\begin{aligned}
+x_{n} &= \frac{4}{7} \left(1 - \left(\frac{9}{16}\right)^n\right)\\
+y_{n} &= \left(\frac{9}{16}\right)^n
+\end{aligned}\end{equation}
+
+Finally, $\lim\limits_{n \rightarrow\infty} \mathbf{s}_n^{(1)} = \lim\limits_{n\rightarrow\infty} x_{n} = \frac{4}{7}$, our chances of winning the game.
+\end{document}
