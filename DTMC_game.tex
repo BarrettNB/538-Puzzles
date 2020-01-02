@@ -4,12 +4,15 @@
 \usepackage{amsthm}
 \usepackage{parskip}
 
-\title{Solutions to MATH 1111 In-Class Activity 1.2}
+\title{Acchi-Muite-Hoi solution}
 \author{Barrett Brister}
 \date{September 6, 2019}
 \newtheorem*{obs}{Observation}
 
 \begin{document}
+
+\section{Problem}
+https://fivethirtyeight.com/features/what-are-your-chances-of-winning-the-u-s-open/
 	
 \section{Solution}
 You win with probability $\frac{4}{7}$.
@@ -49,7 +52,7 @@ After iterating the first few instances of $\mathbf{s}_i$, we note that $\mathbf
 etc. This matches our intuition that the probability of having won increases if and only if it is our turn. So we can think of $\mathbf{s}_1$ as the true base case and left multiply by $P^2$ to get subsequent relevant cases.
 
 \begin{obs}
-	For all positive odd values of $i$, $\mathbf{s}_i^{(2)}=0$.
+	For all positive odd values of $i$, $\mathbf{s}_i^{(3)}=0$.
 \end{obs}
 \begin{proof}
 	We proceed by induction. The base case, $i=1$, is trivial. Suppose that $k$ is odd and $\mathbf{s}_k = \begin{bmatrix}a & b & 0 & c\end{bmatrix}^T$ for arbitrary values $a$, $b$, and $c$. Then
@@ -70,7 +73,7 @@ etc. This matches our intuition that the probability of having won increases if 
 	\end{equation}
 \end{proof}
 
-Since $\mathbf{s}_{k+2}^{(1)}$ and $\mathbf{s}_{k+2}^{(2)}$ only depend on a combination of $a$ and $b$, we may reduce the first two rows of \eqref{iterationVector} to the set of difference equations
+Since $\mathbf{s}_{k+2}^{(2)}$ and $\mathbf{s}_{k+2}^{(3)}$ only depend on a combination of $a$ and $b$, we may reduce the first two rows of \eqref{iterationVector} to the set of difference equations
 
 \begin{equation}\begin{aligned}
 x_{n+1} &= x_i + \frac{1}{4}y_n, \quad &x_0 = 0\\
