@@ -1,0 +1,109 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[T1]{fontenc}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{empheq}
+\usepackage{enumitem}
+
+%\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+
+\title{T-Shirt Cannon Solution}
+\author{Barrett Brister}
+\date{April 10, 2020}
+
+\begin{document}
+\maketitle
+\section*{Part 1: Find $x(\theta)$}
+\noindent Denote $\dot{x}=dx/dt$ and $\ddot{x}=d^2x/dt^2$. We will assume:
+\begin{enumerate}[noitemsep]
+	\item No air resistance, so $\ddot{x}=0$ and $\ddot{y}=-g \approx -9.81 \mathrm{m}/\mathrm{s}^2$;
+	\item The T-shirts are launched from the ground, so $y_0 = y(0) = 0$;
+	\item Without loss of generality, the rows are 1m deep (we are free to choose any depth, since the problem is invariant in the $x$ direction).
+\end{enumerate}
+
+\noindent$\ddot{x}=0$ implies $\dot{x}$ is constant. Then:
+
+\begin{equation}\label{xEquation}
+x(t) = \dot{x} t
+\end{equation}
+\noindent and
+\begin{equation}\label{yEquation}
+y(t) = \dot{y}_0 t - \frac{1}{2}gt^2 = 0
+\end{equation}
+
+\noindent for some time $t \in \mathbb{R^+}$.
+Introduce angle $\theta$ and define $\dot{x}$ and $\dot{y}_0$ in terms of $\theta$:
+
+\begin{subequations}
+\begin{align}
+\dot{x} &= v_0 \cos\theta \label{xDotTheta}\\
+\dot{y}_0 &= v_0 \sin\theta \label{yDotTheta}
+\end{align}
+\end{subequations}
+\noindent for some initial speed $v_0$. Our goal is to find $x$ in terms of $\theta$ that minimizes $v_0$.
+
+First, we combine equations $\eqref{xEquation}$ and $\eqref{xDotTheta}$:
+
+\begin{align}
+t &= \frac{x}{\dot{x}}\nonumber\\ &= \frac{x}{v_0 \cos\theta}
+\end{align}
+
+\noindent Next we combine $\eqref{yEquation}$ and $\eqref{yDotTheta}$:
+
+\begin{align}
+y(x) &= v_0 \sin\theta \cdot \frac{x}{v_0 \cos\theta} - \frac{g}{2}\cdot \left(\frac{x}{v_0 \cos\theta}\right)^2\nonumber\\
+&= x\left[\tan\theta - \frac{gx}{2}\cdot \left(\frac{1}{v_0 \cos\theta}\right)^2 \right]\label{yOfX}
+\end{align}
+
+\noindent Equation \eqref{yOfX} has two roots: the trivial root $x=0$, and a non-trivial root corresponding to the point when the launched T-shirt returns to the ground. Solving it for this non-trivial root yields
+
+\begin{equation}\label{xOfTheta}
+x = \frac{v_0^2}{g}\sin 2\theta
+\end{equation}
+
+\noindent From assumption 3, $x_{\max}=100$, so we normalize \eqref{xOfTheta} to
+
+\begin{equation}\label{xOfThetaNormed}
+x = 100 \sin 2\theta
+\end{equation} 
+
+\noindent This is the equation that we are looking for.
+
+\section*{Part 2: Finding the best seat}
+
+If we take $\varphi = \theta-\frac{\pi}{4}$, we get
+
+\begin{align}
+x &= 100 \sin \left[2\left(\varphi + \frac{\pi}{4}\right)\right]\nonumber\\
+&= 100 \cos 2\varphi
+\end{align}
+
+\noindent which is symmetric about $\varphi = 0$. Thus the solution is the same whether $\theta\in[0, \frac{\pi}{2}]$ or $\theta\in [0, \frac{\pi}{4}]$. We  assume that $\theta\sim U(0, \frac{\pi}{4})$, the continuous uniform distribution. Consider equation \eqref{xOfThetaNormed}'s derivative
+
+\begin{equation}\label{dTheta}
+\frac{dx}{d\theta} = 200 \cos 2\theta
+\end{equation}
+
+\noindent $dx/d\theta > 0$ everywhere on $\theta\in[0, \frac{\pi}{4})$, and $x=100$ has the unique solution on $[0, \frac{\pi}{4}]$ of $\theta = \frac{\pi}{4}$. Thus \eqref{xOfThetaNormed} is invertible on $[0, \frac{\pi}{4}]$, and there we may define $\theta(x)$ as the inverse of $x(\theta)$:
+
+\begin{equation}
+\theta = \frac{1}{2} \sin^{-1} \frac{x}{100}
+\end{equation}
+
+\noindent which maps $[0, 100]$ onto $[0, \frac{\pi}{4}]$. The goal is to find $x^* \in [0, \frac{\pi}{4}]$ that gives
+
+\begin{equation}\label{F_of_x}
+\max F(x^*) = \int_{x^*-1}^{x^*} \theta(x)\, dx
+\end{equation}
+
+\noindent the probability that the T-shirt lands on row $x^*$. $d\theta/dx = 1/(dx/d\theta)$, so $F'(x)$ is strictly increasing over $(0, 100)$. Thus we may change the optimization problem to
+\begin{align}
+\max F'(x^*) &= \frac{d}{dx}\int_{0}^{x^*} \theta(x)\, dx - \frac{d}{dx}\int_{0}^{x^*-1}\theta(x)\, dx \nonumber\\
+&= \theta(x^*) - \theta(x^*-1) \label{F_prime_of_x}
+\end{align}
+
+\noindent Expression \eqref{F_prime_of_x} is also the slope of secant lines of $\theta(x)$ with $\Delta x = 1$. Since $\theta(x)$ is strictly increasing, $F'(x)$ is maximized when $x$ is maximized, or $x^*=100$.
+
+Therefore, the optimal place to sit is on the very back row.
+\end{document}
