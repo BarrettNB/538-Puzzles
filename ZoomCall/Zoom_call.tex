@@ -1,0 +1,69 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{empheq}
+\usepackage{enumitem}
+
+%\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+
+\title{World's Biggest Zoom Call Solution}
+\author{Barrett Brister}
+\date{May 30, 2020}
+
+\begin{document}
+\maketitle
+\section{Setup}
+Each person $k$ is randomly and independently assigned two times $X_1^{(k)}$ and $X_2^{(k)}$, $X_i^{(k)} \sim \text{Unif}(0,1)$ for $i = 1,2$, where $X_i^{(k)}$ is the $i$th time of the $k$th person in decimal number of hours since 8 AM. Next we define $Y_1^{(k)} = \min(X_1^{(k)}, X_2^{(k)})$, the $k$th person's arrival time to the call, and $Y_2^{(k)} = \max(X_1^{(k)}, X_2^{(k)})$, the $k$th person's departure time. Thus the interval $(Y_1^{(k)}, Y_2^{(k)})$ represents the time interval when the $k$th person is on the call. Note that $P(Y_i^{(k)} = y) = 0$, so it is arbitrary whether to denote this interval as open or closed. Since a person arriving into the call may need a few moments to get their bearings, and someone who is leaving the call is unlikely to be paying attention to it in that moment, it makes more denote this interval as open. Observe that for all $k$ and $\ell$, including $k = \ell$,
+\begin{align}
+P(X_1^{(k)} < X_2^{(\ell)}) &= 1/2 \nonumber\\
+P(X_1^{(k)} = X_2^{(\ell)}) &= 0 \nonumber\\
+P(X_1^{(k)} > X_2^{(\ell)}) &= 1/2
+\end{align}
+since all $X_i^{(k)}$ are iid. Since $Y_i^{(k)}$, $i = 1,2$ is the same function only of $X_1^{(k)}$ and $X_2^{(k)}$, this also means that $Y_i^{(k)}$ and $Y_i^{(\ell)}$ are iid whenever $k \neq\ell$.
+
+\section{Intersection of two intervals}
+To start, let us consider the probability that two people are simultaneously on the call. This will happen if and only if $Y_2^{(1)} > Y_1^{(2)}$ and $Y_2^{(2)} > Y_1^{(1)}$. We denote
+
+\begin{equation}I_2 = \left(Y_1^{(1)}, Y_1^{(2)}\right) \cap \left(Y_2^{(1)}, Y_2^{(2)}\right)\label{def_I2}
+\end{equation}
+Using all the above and the law of total probability,
+\begin{align}
+P(I_2 \neq\varnothing) =&P(Y_2^{(1)} > Y_1^{(2)} \wedge Y_2^{(2)} > Y_1^{(1)}) \nonumber\\
+=&P(X_2^{(1)} > X_1^{(2)} \wedge X_2^{(2)} > X_1^{(1)} | X_1^{(1)} < X_2^{(1)} \wedge X_1^{(2)} < X_2^{(2)})P(X_1^{(1)} < X_2^{(1)} \wedge X_1^{(2)} < X_2^{(2)})\nonumber\\
+&+P(X_1^{(1)} > X_1^{(2)} \wedge X_2^{(2)} > X_2^{(1)} | X_1^{(1)} > X_2^{(1)} \wedge X_1^{(2)} < X_2^{(2)})P(X_1^{(1)} > X_2^{(1)} \wedge X_1^{(2)} < X_2^{(2)})\nonumber\\
+&+P(X_2^{(1)} > X_2^{(2)} \wedge X_1^{(2)} > X_1^{(1)} | X_1^{(1)} < X_2^{(1)} \wedge X_1^{(2)} > X_2^{(2)})P(X_1^{(1)} < X_2^{(1)} \wedge X_1^{(2)} > X_2^{(2)})\nonumber\\
+&+P(X_1^{(1)} > X_2^{(2)} \wedge X_1^{(2)} > X_2^{(1)} | X_1^{(1)} > X_2^{(1)} \wedge X_1^{(2)} > X_2^{(2)})P(X_1^{(1)} > X_2^{(1)} \wedge X_1^{(2)} > X_2^{(2)})\nonumber\\
+=&P(X_2^{(1)} > X_1^{(2)})P(X_2^{(2)} > X_1^{(1)})P(X_1^{(1)} < X_2^{(1)})P(X_1^{(2)} < X_2^{(2)})\nonumber\\
+&+P(X_1^{(1)} > X_1^{(2)})P(X_2^{(2)} > X_2^{(1)})P(X_1^{(1)} > X_2^{(1)})P(X_1^{(2)} < X_2^{(2)})\nonumber\\
+&+P(X_2^{(1)} > X_2^{(2)})P(X_1^{(2)} > X_1^{(1)})P(X_1^{(1)} < X_2^{(1)})P(X_1^{(2)} > X_2^{(2)})\nonumber\\
+&+P(X_1^{(1)} > X_2^{(2)})P(X_1^{(2)} > X_2^{(1)})P(X_1^{(1)} > X_2^{(1)})P(X_1^{(2)} > X_2^{(2)})\quad\text{because of independences}\nonumber\\
+&=4\cdot\left(\frac{1}{2}\right)^4 = \frac{1}{4}.\label{P_I2}
+\end{align}
+
+\section{Intersection of $n$ intervals}
+To generalize our two-interval results, denote $I_n = \bigcap\limits_{j=1}^{n} \left(Y_j^{(1)}, Y_j^{(2)}\right)$. Because each $\left(Y_j^{(1)}, Y_j^{(2)}\right)$ is a continuous open interval, $I_n$ must be as well, so if $I_n \neq\varnothing$, $I_n = \left(Y_{\dagger}^{(1)}, Y_{\dagger}^{(2)}\right)$ for some $0 \leq Y_{\dagger}^{(1)} < Y_{\dagger}^{(2)} \leq 1$, $n=2,3,4,\dots$. Clearly, $I_n$ is a function of $X_1^{(1)}, X_1^{(2)},\dots, X_n^{(1)}, X_n^{(2)}$. Thus we can take the intersection $I_n = \bigcap\limits_{j=1}^n \left(Y_j^{(1)}, Y_j^{(2)}\right) = \left(Y_{\dagger}^{(1)}, Y_{\dagger}^{(2)}\right) \cap \left(Y_n^{(1)}, Y_n^{(2)}\right)$, which has the same form as \eqref{def_I2}. From \eqref{P_I2}, $P(I_n \neq\varnothing) = \frac{1}{4}P(I_{n-1} \neq\varnothing)$. By iterating, we get
+
+\begin{equation}
+P(I_n \neq\varnothing) = \left(\frac{1}{4}\right)^{n-1}\label{solution}
+\end{equation}
+
+\section{Solution}
+The problem sets $n \approx 3.3\times 10^8$. Then
+\begin{align}
+P(I_{3.3\times 10^8} \neq\varnothing) &= \left(\frac{1}{4}\right)^{3.3\times 10^8-1}\nonumber\\
+&= \left(\frac{1}{4}\right)^{3.3\times 10^8}\label{solution_plugged_in}
+\end{align}
+since $3.3\times 10^8$ is approximated. This is an absurdly tiny number, tinier than most calculators can handle!
+
+\section{Multiple people on the call}
+Suppose $m$ people join the call according to the same rules instead of just one in Equation \eqref{solution}. Let's assume that since every American joins the call at some point, all $m$ of these people are not Americans, meaning that we just add these $m$ new people to the exponent:
+
+\begin{equation}
+P(I_{3.3\times 10^8 + m} \neq\varnothing) = \left(\frac{1}{4}\right)^{3.3\times 10^8 + m}
+\end{equation}
+This probability is even smaller!
+
+\end{document}
